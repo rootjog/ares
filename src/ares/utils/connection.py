@@ -4,8 +4,12 @@ from typing import Dict, List
 
 from paramiko import AutoAddPolicy, SSHClient
 
-from ares.models.connection import (Application, ExtractCommands,
-                                    IdentificationCommands, Server)
+from ares.models.connection import (
+    Application,
+    ExtractCommands,
+    IdentificationCommands,
+    Server,
+)
 
 
 class Connection:
@@ -64,9 +68,15 @@ class Connection:
                 apps_names = response[0::2]
                 apps_versions = response[1::2]
 
+                if len(apps_names) != len(apps_versions):
+                    print(
+                        "Something went wrong "
+                        "retrieving app name and versions."
+                    )
+
                 for name, version in zip(apps_names, apps_versions):
                     name = name.strip().replace(":", "")
-                    version = version.strip().split(':')[1].strip()
+                    version = version.strip().split(":")[1].strip()
                     self._known_apps[name] = Application(
                         name=name, version=version, operating_system="mac"
                     )

@@ -15,7 +15,9 @@ class IdentificationCommands:
 
 @dataclass
 class ExtractCommands:
-    MAC: str = "system_profiler SPApplicationsDataType | grep  'Version:' -B 2"
+    MAC: str = (
+        "system_profiler SPApplicationsDataType | grep  'Version:' -B 2"
+    )
 
 
 @dataclass

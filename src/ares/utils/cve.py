@@ -1,28 +1,59 @@
 import os
-import subprocess
 import time
-from typing import Dict
+from typing import Dict, List
+
+import requests
 
 from ares.models.connection import Application
+from ares.models.cve import CVE
 
-class SearchSploitContext:
+
+class OpenCVEContext:
     def __init__(self, know_apps: Dict[str, Application]):
-        self._known_apps: Dict[str, Application]= know_apps
+        self._known_apps: Dict[str, Application] = know_apps
+        self._base_url: str = "https://app.opencve.io/api/cve"
+        self.headers = {
+            "Accept": "application/json",
+            "Host": "app.opencve.io",
+        }
 
     def retrieve_cve(self):
         for app_name, app in self._known_apps.items():
             app: Application = app
-            print(f"Searching public exploits for app '{app_name}'")
-            process = subprocess.run(f"searchsploit -c '{app_name}'", shell=True, encoding="utf-8", capture_output=True)
+            page = 1
+            last_visited_page = 1
+            while True:
+                last_visited_page = page
+                print(
+                    "Storing public exploits for app"
+                    f"'{app_name} (page: {page})'"
+                )
+                response = requests.get(
+                    f"{self._base_url}?search={app_name}&page={page}",
+                    headers=self.headers,
+                    auth=(
+                        os.environ["OPENCVE_AUTH"].split(":")[0],
+                        os.environ["OPENCVE_AUTH"].split(":")[1],
+                    ),
+                )
+                response = response.json()
+                if "next" in response and response["next"] is not None:
+                    _next: List = response["next"].split("?")[1].split("&")
+                    for query_param in _next:
+                        if "page" not in query_param:
+                            continue
+                        page = query_param.split("=")[1]
 
-            if not process.__getattribute__("stdout"):
-                print("No match")
-                print()
-                continue
+                app.cve.extend(
+                    list(map(lambda cve: CVE(**cve), response["results"]))
+                )
 
-            response = process.stdout
+                if int(page) == 5:
+                    break
 
-            if app.version in response:
-                print(f"Possible match {response}")
-            time.sleep(1)
+                if int(page) == int(last_visited_page):
+                    break
+                time.sleep(1)
+            break
+
             print()
