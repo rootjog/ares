@@ -1,6 +1,8 @@
 import random
 from dataclasses import dataclass, field
 
+from paramiko import SSHClient
+
 
 class IdentificationCommands:
     def __init__(self):
@@ -34,3 +36,4 @@ class Application:
     version: str
     operating_system: str
     cve: list = field(default_factory=list)
+    client: SSHClient = field(default_factory=SSHClient)

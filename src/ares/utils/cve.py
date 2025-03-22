@@ -25,7 +25,7 @@ class OpenCVEContext:
             while True:
                 last_visited_page = page
                 print(
-                    "Storing public exploits for app"
+                    "Storing public exploits for app "
                     f"'{app_name} (page: {page})'"
                 )
                 response = requests.get(

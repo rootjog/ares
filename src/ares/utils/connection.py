@@ -4,12 +4,8 @@ from typing import Dict, List
 
 from paramiko import AutoAddPolicy, SSHClient
 
-from ares.models.connection import (
-    Application,
-    ExtractCommands,
-    IdentificationCommands,
-    Server,
-)
+from ares.models.connection import (Application, ExtractCommands,
+                                    IdentificationCommands, Server)
 
 
 class Connection:
@@ -78,13 +74,17 @@ class Connection:
                     name = name.strip().replace(":", "")
                     version = version.strip().split(":")[1].strip()
                     self._known_apps[name] = Application(
-                        name=name, version=version, operating_system="mac"
+                        name=name,
+                        version=version,
+                        operating_system="mac",
+                        client=client,
                     )
             elif "windows" in operating_system:
                 ...
             elif "linux" in operating_system:
                 ...
-            client.close()
+            else:
+                client.close()
 
     def parse_response(self, data: bytes) -> str:
         return data.read().decode(encoding="utf-8")

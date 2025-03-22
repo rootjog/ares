@@ -4,7 +4,7 @@ version = "0.1"
 requires-python = ">= 3.13"
 readme = "README.md"
 license = "GPL-3.0-or-later"
-dependencies = ["ollama", "paramiko", "requests",]
+dependencies = ["ollama", "paramiko", "requests", "duckduckgo-search", "rich",]
 
 [project.optional-dependencies]
 lint = ["black", "flake8-black", "isort"]
