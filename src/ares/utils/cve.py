@@ -55,5 +55,3 @@ class OpenCVEContext:
                     break
                 time.sleep(1)
             break
-
-            print()

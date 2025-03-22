@@ -1,4 +1,3 @@
-import re
 from typing import Dict
 
 from duckduckgo_search import DDGS
@@ -34,14 +33,20 @@ class AIContext:
                 "You are the best doing vulnerability scanning "
                 f"in a {app.operating_system.upper()} operating system, "
                 "the application I'm currently trying to "
-                f"pentest with owner permission is {app.name} version {app.version}. "
-                f"It appears that this version is vulnerable "
-                f"to the following CVE (I'm including the description): `({cves_names_and_descriptions})`, "
+                "pentest with owner permission "
+                f"is {app.name} version {app.version}. "
+                "It appears that this version"
+                "is vulnerable "
+                "to the following CVE (I'm including "
+                f"the description): `({cves_names_and_descriptions})`, "
                 "could you please generate a list of "
                 "commands to exploit this application? "
-                "Please send one line commands not listed ones, "
-                "Note that I'm going to execute this commands by automatizating it, " 
-                "so give me a cool format where your comments have # at line start."
+                "Please send one line commands not "
+                "listed ones, "
+                "Note that I'm going to "
+                "execute this commands by automatizating it, "
+                "so give me a cool format "
+                "where your comments have # at line start."
             )
             console.print(
                 f"{app.name} - {cves_names_and_descriptions}",
@@ -54,14 +59,12 @@ class AIContext:
             console.rule("AI Response")
             console.print(results)
 
-            results = results.split('\n')
+            results = results.split("\n")
             console.rule("Commands to execute")
             for line in results:
                 if line.startswith("#") or line == "```" or line == "":
                     continue
                 self.exploit(client=app.client, command=line)
-
-                
 
     def exploit(self, client: SSHClient, command: str):
         _, stdout, stderr = client.exec_command(command=command)
@@ -69,7 +72,6 @@ class AIContext:
         console.print(f"stdout: {self.parse_response(stdout)}")
         console.print(f"stderr: {self.parse_response(stderr)}")
         console.print()
-
 
     def parse_response(self, data: bytes) -> str:
         return data.read().decode(encoding="utf-8")
