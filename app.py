@@ -11,7 +11,7 @@ def main():
     search_sploit_context = OpenCVEContext(know_apps=known_apps)
     search_sploit_context.retrieve_cve()
     # Ask AI for commands to exploit them.
-    ask_ai(known_apps=known_apps)
+    ...
     # If success then return, 
     # else throw exception and exit.
     #success()
