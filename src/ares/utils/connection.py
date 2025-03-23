@@ -4,8 +4,12 @@ from typing import Dict, List
 
 from paramiko import AutoAddPolicy, SSHClient
 
-from ares.models.connection import (Application, ExtractCommands,
-                                    IdentificationCommands, Server)
+from ares.models.connection import (
+    Application,
+    ExtractCommands,
+    IdentificationCommands,
+    Server,
+)
 
 
 class Connection:

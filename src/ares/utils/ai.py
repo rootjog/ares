@@ -17,7 +17,9 @@ class AIContext:
     def gather_info(self):
         for _, app in self._known_apps.items():
             app: Application = app
-            cves_names_and_descriptions = ", ".join(
+            if len(app.cve) == 0:
+                continue
+            cves_names_and_descriptions = ",".join(
                 list(
                     map(
                         lambda cve: f"{cve.cve_id} ({(cve.description)})",
@@ -65,13 +67,13 @@ class AIContext:
                 if line.startswith("#") or line == "```" or line == "":
                     continue
                 self.exploit(client=app.client, command=line)
+            console.print()
 
     def exploit(self, client: SSHClient, command: str):
         _, stdout, stderr = client.exec_command(command=command)
         console.print(command)
         console.print(f"stdout: {self.parse_response(stdout)}")
         console.print(f"stderr: {self.parse_response(stderr)}")
-        console.print()
 
     def parse_response(self, data: bytes) -> str:
         return data.read().decode(encoding="utf-8")
