@@ -62,11 +62,13 @@ class OpenCVEContext:
         subversion: int,
         last_response: Union[Dict | None] = None,
     ):
+        if subversion >= len(original_version) + 1:
+            return last_response
         version = original_version[0:subversion]
         print(
             "GET "
             f"{self._base_url}?search="
-            f"{quote_plus(app_name)}+{version}&pagea={page}"
+            f"{quote_plus(app_name)}+{version}&page={page}"
         )
         response = requests.get(
             f"{self._base_url}?search="
