@@ -106,7 +106,7 @@ class AIContext:
         )
         if len(repository) == 0:
             return
-        return (repository[0].full_name, results.get('fix', None))
+        return (repository[0].full_name, results.get("fix", None))
 
     def guess_and_get_repository_files(self, cve: CVE):
         repo_full_name, fix = self.guess_repository(cve=cve)
@@ -176,7 +176,7 @@ class AIContext:
             f"Exploitable to CVE {cve.cve_id}({cve.description})?"
             "Don't try to guess if it's exploitable, try to read the code "
             "first and then interpret is it is."
-            "If yes, send the word EXPLOITABLE in the beggining of the " 
+            "If yes, send the word EXPLOITABLE in the beggining of the "
             "response and send a JSON right then containing "
             "the following format example:\n"
             "{'commands':['ls','cd','test']}"
