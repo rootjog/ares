@@ -175,4 +175,4 @@ cython_debug/
 .pypirc
 
 # App files
-servers.json
+servers*.json
