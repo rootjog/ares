@@ -1,12 +1,12 @@
 import os
 import time
 from typing import Dict, List, Union
+from urllib.parse import quote_plus
 
 import requests
 
 from ares.models.connection import Application
 from ares.models.cve import CVE
-from urllib.parse import quote_plus
 
 
 class OpenCVEContext:
@@ -64,10 +64,13 @@ class OpenCVEContext:
     ):
         version = original_version[0:subversion]
         print(
-            f"GET {self._base_url}?search={quote_plus(app_name)}+{version}&page={page}"
+            "GET "
+            f"{self._base_url}?search="
+            f"{quote_plus(app_name)}+{version}&pagea={page}"
         )
         response = requests.get(
-            f"{self._base_url}?search={quote_plus(app_name)}+{version}&page={page}",
+            f"{self._base_url}?search="
+            f"{quote_plus(app_name)}+{version}&page={page}",
             headers=self.headers,
             auth=(
                 os.environ["OPENCVE_AUTH"].split(":")[0],
@@ -85,7 +88,7 @@ class OpenCVEContext:
                 page=page,
                 original_version=original_version,
                 subversion=subversion + 1,
-                last_response=response
+                last_response=response,
             )
 
         return last_response
